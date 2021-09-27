@@ -14,7 +14,7 @@ module.exports.validateUsername = data => {
     });
     let validateResult = schema.validate(data);
     if(validateResult.error){
-        let errorDetail = validateUsername.error.details[0]; // validated errors: required, min lenght ...
+        let errorDetail = validateResult.error.details[0]; // validated errors: required, min lenght ...
         let message = errorDetail.message;
         if(errorDetail.type==='string.pattern.base'){
             // username contain special characters

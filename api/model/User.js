@@ -12,7 +12,7 @@ module.exports.User = User;
 
 var getByUsername = async username => {
     let validateResult = Validator.validateUsername({username});
-    if(!validateResult.error){
+    if (!validateResult.error) {
         return await User.findOne({where: {username}});
     }
     return null;
@@ -23,19 +23,19 @@ var register = async req => {
 
     // validate username
     let validateUsername = Validator.validateUsername({username: data.username});
-    if(!validateUsername.isSuccess){
+    if (!validateUsername.isSuccess) {
         return validateUsername;
     }
 
     // validate password
     let validatePassword = Validator.validatePassword({password: data.password, passwordRepeat: data.passwordRepeat});
-    if(!validatePassword.isSuccess){
+    if (!validatePassword.isSuccess) {
         return validatePassword;
     }
 
     // check if username is exists
     let mUser = await getByUsername(data.username);
-    if(mUser){
+    if (mUser) {
         return {status: 0, message: "User exists!"}
     }
 
@@ -58,10 +58,14 @@ var login = async (req) => {
     let username = req.body.username;
     let password = req.body.password;
     let mUser = await getByUsername(username);
-    if(mUser && mUser.password===md5(password)){
-        return defaultSuccessResponse;
+    if (mUser && mUser.password === md5(password)) {
+        let result = defaultSuccessResponse;
+        result.token = mUser.token;
+        return result;
     }
-    return defaultFailureResponse;
+    let result = defaultFailureResponse;
+    result.message = 'Wrong username or password';
+    return result;
 }
 
 module.exports.getByUsername = getByUsername;
