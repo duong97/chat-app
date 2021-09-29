@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import {Form, Button, Container, Row, Col, Alert} from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {useHistory} from 'react-router-dom';
+import {useAuth} from '../util/use-auth'
 
 async function loginUser(credentials) {
     return fetch(process.env.REACT_APP_API_URL+'/login', {
@@ -23,19 +24,11 @@ export default function Login(){
     const [password, setPassword] = useState();
     const [error, setError] = useState();
     const history = useHistory();
+    const auth = useAuth()
 
     const handleSubmit = async e => {
         e.preventDefault();
-        const data = await loginUser({
-            username,
-            password
-        });
-        if(data.isSuccess){
-            setToken(data.token);
-            history.push("/");
-        } else {
-            setError('Wrong username or password');
-        }
+        auth.signin(username, password)
     }
 
     const renderError = () => {

@@ -1,37 +1,30 @@
 import React from "react";
-import {Form, Button, Container, Row, Col, Nav} from "react-bootstrap";
+import {Button, Nav} from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {useHistory, BrowserRouter, Switch, Route, Link} from 'react-router-dom';
+import {useAuth} from '../util/use-auth'
 
 export default function NavBar() {
-
-    const history = useHistory;
-
-    const logout = () => {
-        localStorage.removeItem('token');
-        history.push("/login");
-    }
+    const auth = useAuth()
 
     return (
         <Nav activeKey="/" className="justify-content-center">
             <Nav.Item>
                 <Nav.Link href="/">Home</Nav.Link>
             </Nav.Item>
-            {localStorage.getItem('token') ?
+            {auth.user ? (
                 <Nav.Item>
-                    <Button variant="outline-success" onClick={logout}>Logout</Button>
+                    <Button variant="outline-success" onClick={() => auth.signout()}>Logout</Button>
                 </Nav.Item>
-                : (
-                    <React.Fragment>
-                        <Nav.Item>
-                            <Nav.Link href="/login">Login</Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item>
-                            <Nav.Link href="/register">Register</Nav.Link>
-                        </Nav.Item>
-                    </React.Fragment>
-                )
-            }
+            ) : (
+                <React.Fragment>
+                    <Nav.Item>
+                        <Nav.Link href="/login">Login</Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                        <Nav.Link href="/register">Register</Nav.Link>
+                    </Nav.Item>
+                </React.Fragment>
+            )}
         </Nav>
     );
 }
