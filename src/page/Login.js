@@ -4,26 +4,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {useHistory} from 'react-router-dom';
 import {useAuth} from '../util/use-auth'
 
-async function loginUser(credentials) {
-    return fetch(process.env.REACT_APP_API_URL+'/login', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(credentials)
-    })
-    .then(data => data.json())
-}
-
-function setToken(token){
-    localStorage.setItem('token', token);
-}
-
 export default function Login(){
     const [username, setUsername] = useState();
     const [password, setPassword] = useState();
     const [error, setError] = useState();
-    const history = useHistory();
     const auth = useAuth()
 
     const handleSubmit = async e => {
